@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>AI Text Summarizer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {font-family: Arial, sans-serif; max-width: 700px; margin: 2rem auto; padding: 1rem; background:#fafafa;}
+    h1 {text-align:center;}
+    textarea {width:100%; height:150px; padding:.5rem; margin-bottom:1rem;}
+    .flash {background:#e7f3fe; border:1px solid #bce8f1; padding:.5rem; margin:.5rem 0; border-radius:4px;}
+    pre {white-space:pre-wrap; background:#eee; padding:.5rem; border-radius:4px;}
+  </style>
+</head>
+<body>
+  <h1>AI Text Summarizer</h1>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for m in messages %}
+        <div class="flash">{{ m }}</div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="post" action="{{ url_for('summarize') }}">
+    <textarea name="text" placeholder="Paste any text here...">{{ original or '' }}</textarea>
+    <button type="submit">Summarize</button>
+  </form>
+
+  {% if summary %}
+    <h2>Summary</h2>
+    <pre>{{ summary }}</pre>
+  {% endif %}
+
+  {% if recent %}
+    <h2>Recent Summaries</h2>
+    <ul>
+    {% for row in recent %}
+      <li>
+        <strong>Original:</strong> {{ row['original']|truncate(80) }}<br>
+        <strong>Summary:</strong> {{ row['summary']|truncate(80) }}
+      </li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+</body>
+</html>
